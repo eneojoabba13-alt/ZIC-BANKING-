@@ -1,0 +1,889 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#081b35">
+  <title>ZIC Bank | Digital Banking</title>
+  <style>
+    :root {
+      --navy: #081b35;
+      --navy2: #102b50;
+      --gold: #d8b45b;
+      --gold-light: #f2d995;
+      --bg: #f3f5f9;
+      --white: #fff;
+      --muted: #8792a5;
+      --green: #159b70;
+      --red: #d94c5c;
+      --border: #e8ebf1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: var(--bg);
+      color: #17253b;
+      min-height: 100vh;
+    }
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+
+    .hidden { display: none !important; }
+
+    /* LOGIN */
+    #loginPage {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: linear-gradient(135deg, #06152b, #17375d);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 410px;
+      padding: 38px;
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 25px 80px #0005;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 23px;
+      color: var(--navy);
+      letter-spacing: 1px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .login-card h1 {
+      font-size: 27px;
+      margin-top: 32px;
+      color: var(--navy);
+    }
+
+    .subtext { color: var(--muted); margin: 9px 0 25px; font-size: 14px; }
+
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #fafbfc;
+      border-radius: 10px;
+      padding: 14px;
+      outline: none;
+      color: var(--navy);
+    }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--gold);
+    }
+
+    .primary-btn {
+      border: 0;
+      border-radius: 10px;
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 800;
+      padding: 14px 20px;
+      width: 100%;
+      transition: .2s;
+    }
+
+    .primary-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    .demo-note {
+      background: #fff8e8;
+      color: #74571b;
+      padding: 12px;
+      border-radius: 9px;
+      font-size: 12px;
+      margin-top: 18px;
+      line-height: 1.6;
+    }
+
+    /* DASHBOARD */
+    #dashboard { min-height: 100vh; }
+
+    .sidebar {
+      width: 245px;
+      background: var(--navy);
+      color: white;
+      position: fixed;
+      inset: 0 auto 0 0;
+      padding: 28px 18px;
+      display: flex;
+      flex-direction: column;
+      z-index: 5;
+    }
+
+    .sidebar .brand { color: white; padding: 0 8px 40px; }
+    .sidebar .brand-icon { background: var(--gold); }
+
+    .nav-label {
+      color: #8da0ba;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      margin: 12px 10px;
+    }
+
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #c4cede;
+      padding: 14px 12px;
+      border-radius: 9px;
+      text-align: left;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      color: white;
+      background: #ffffff18;
+    }
+
+    .nav-btn.active { border-left: 3px solid var(--gold); }
+
+    .logout {
+      margin-top: auto;
+      color: #ffb5b5;
+    }
+
+    .main {
+      margin-left: 245px;
+      padding: 30px 38px;
+      max-width: 1600px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .topbar h1 { color: var(--navy); font-size: 25px; }
+    .topbar p { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--navy2);
+      color: var(--gold);
+      display: grid;
+      place-items: center;
+    }
+
+    .welcome { margin-bottom: 23px; }
+    .welcome h2 { color: var(--navy); font-size: 20px; }
+    .welcome p { color: var(--muted); margin-top: 6px; font-size: 13px; }
+
+    .balance-card {
+      background: linear-gradient(120deg, #091d38, #183d67);
+      color: white;
+      border-radius: 19px;
+      padding: 28px;
+      min-height: 205px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 28px #102b5025;
+    }
+
+    .balance-card::after {
+      content: "";
+      width: 240px;
+      height: 240px;
+      border: 1px solid #d8b45b45;
+      border-radius: 50%;
+      position: absolute;
+      right: -65px;
+      top: -90px;
+      box-shadow: 0 0 0 30px #d8b45b0d, 0 0 0 65px #d8b45b09;
+    }
+
+    .balance-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #d3dceb;
+      font-size: 13px;
+    }
+
+    .balance-value {
+      font-size: clamp(30px, 5vw, 39px);
+      font-weight: 800;
+      margin: 17px 0;
+      letter-spacing: .5px;
+    }
+
+    .gold-text { color: var(--gold); }
+    .account-info { font-size: 12px; color: #d3dceb; }
+
+    .eye-btn {
+      background: #ffffff18;
+      border: 1px solid #ffffff30;
+      color: white;
+      padding: 7px 12px;
+      border-radius: 7px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 17px;
+      margin: 22px 0;
+    }
+
+    .stat-card, .panel {
+      background: white;
+      border-radius: 14px;
+      padding: 21px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-card span { color: var(--muted); font-size: 12px; }
+    .stat-card h3 { margin-top: 11px; font-size: 21px; color: var(--navy); }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 10px;
+    }
+
+    .section-heading h2 { color: var(--navy); font-size: 17px; }
+
+    .text-btn {
+      background: none;
+      border: none;
+      color: #a47d27;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 25px;
+    }
+
+    .action {
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 13px;
+      padding: 18px 10px;
+      text-align: center;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .action:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .action-icon { font-size: 22px; margin-bottom: 9px; }
+
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .transaction:last-child { border: 0; }
+    .transaction-left { display: flex; align-items: center; gap: 12px; }
+
+    .tx-icon {
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: #f1f3f7;
+      font-size: 17px;
+    }
+
+    .tx-name { font-weight: 700; font-size: 13px; }
+    .tx-date { color: var(--muted); font-size: 11px; margin-top: 5px; }
+    .tx-amount { font-weight: 800; font-size: 13px; text-align: right; }
+    .credit { color: var(--green); }
+    .debit { color: var(--red); }
+
+    .content-page { display: none; }
+    .content-page.active { display: block; }
+
+    .form-panel { max-width: 560px; }
+    .form-panel h2 { margin-bottom: 23px; color: var(--navy); }
+
+    .secondary-btn {
+      border: 1px solid var(--border);
+      background: white;
+      padding: 12px 16px;
+      border-radius: 9px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .history-list { margin-top: 15px; }
+    .history-list .transaction { background: white; padding: 17px; margin-bottom: 9px; border-radius: 10px; border: 1px solid var(--border); }
+
+    .notice {
+      padding: 14px;
+      background: #fff7e6;
+      color: #76591e;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      background: var(--navy);
+      color: white;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 25px #0003;
+      z-index: 20;
+      font-size: 13px;
+      max-width: 320px;
+    }
+
+    .mobile-menu { display: none; }
+
+    @media(max-width: 850px) {
+      .sidebar { width: 205px; }
+      .main { margin-left: 205px; padding: 25px 20px; }
+      .quick-actions { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media(max-width: 600px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 20px 15px 85px; }
+      .mobile-menu {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--navy);
+        justify-content: space-around;
+        padding: 11px 5px;
+        z-index: 10;
+      }
+      .mobile-menu button {
+        background: none;
+        border: 0;
+        color: #d3dceb;
+        font-size: 10px;
+        display: grid;
+        gap: 5px;
+        justify-items: center;
+      }
+      .mobile-menu button.active { color: var(--gold); }
+      .topbar { margin-bottom: 25px; }
+      .topbar h1 { font-size: 20px; }
+      .user-chip span:last-child { display: none; }
+      .stats { gap: 8px; }
+      .stat-card { padding: 13px 10px; }
+      .stat-card h3 { font-size: 15px; }
+      .stat-card span { font-size: 10px; }
+      .balance-card { padding: 22px 18px; }
+      .quick-actions { gap: 9px; }
+      .action { padding: 15px 7px; }
+      .login-card { padding: 27px 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<section id="loginPage">
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-icon">Z</div>
+      <span>ZIC BANK</span>
+    </div>
+    <h1>Welcome back.</h1>
+    <p class="subtext">Sign in to your digital banking dashboard.</p>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" type="text" placeholder="Enter your username" required>
+      </div>
+      <div class="field">
+        <label for="password">Demo password</label>
+        <input id="password" type="password" placeholder="Enter demo password" required>
+      </div>
+      <button class="primary-btn" type="submit">Sign in securely</button>
+    </form>
+
+    <div class="demo-note">
+      <strong>DEMO ACCESS</strong><br>
+      Username: demo<br>
+      Password: zic123<br>
+      This is a demonstration only. Do not enter real banking credentials.
+    </div>
+  </div>
+</section>
+
+<!-- BANKING DASHBOARD -->
+<section id="dashboard" class="hidden">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">Z</div>
+      <span>ZIC BANK</span>
+    </div>
+    <p class="nav-label">MAIN MENU</p>
+    <button class="nav-btn active" data-page="home">▦ &nbsp; Dashboard</button>
+    <button class="nav-btn" data-page="transfer">↗ &nbsp; Transfer money</button>
+    <button class="nav-btn" data-page="deposit">＋ &nbsp; Deposit</button>
+    <button class="nav-btn" data-page="withdraw">↙ &nbsp; Withdraw</button>
+    <button class="nav-btn" data-page="history">◷ &nbsp; Transactions</button>
+    <p class="nav-label">ACCOUNT</p>
+    <button class="nav-btn" data-page="profile">♙ &nbsp; My profile</button>
+    <button class="nav-btn logout" id="logoutBtn">↪ &nbsp; Sign out</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p>Your financial world, at a glance.</p>
+      </div>
+      <div class="user-chip">
+        <div class="avatar">D</div>
+        <span>Demo User</span>
+      </div>
+    </header>
+
+    <!-- HOME -->
+    <div class="content-page active" id="home">
+      <div class="welcome">
+        <h2>Hello, Demo User!</h2>
+        <p>Welcome to your ZIC digital banking experience.</p>
+      </div>
+
+      <div class="balance-card">
+        <div class="balance-top">
+          <span>AVAILABLE BALANCE</span>
+          <button class="eye-btn" id="toggleBalance">Hide</button>
+        </div>
+        <div class="balance-value" id="balance">₦250,000.00</div>
+        <div class="account-info">
+          ACCOUNT NUMBER &nbsp; <strong class="gold-text">0123456789</strong>
+          &nbsp; | &nbsp; SAVINGS ACCOUNT
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <span>Total deposits</span>
+          <h3 id="totalDeposits">₦250,000</h3>
+        </div>
+        <div class="stat-card">
+          <span>Total withdrawals</span>
+          <h3 id="totalWithdrawals">₦0</h3>
+        </div>
+        <div class="stat-card">
+          <span>Transactions</span>
+          <h3 id="totalTransactions">0</h3>
+        </div>
+      </div>
+
+      <div class="section-heading"><h2>Quick actions</h2></div>
+      <div class="quick-actions">
+        <button class="action" data-go="transfer"><div class="action-icon">↗</div>Transfer</button>
+        <button class="action" data-go="deposit"><div class="action-icon">＋</div>Deposit</button>
+        <button class="action" data-go="withdraw"><div class="action-icon">↙</div>Withdraw</button>
+        <button class="action" data-go="history"><div class="action-icon">◷</div>History</button>
+      </div>
+
+      <div class="panel">
+        <div class="section-heading">
+          <h2>Recent transactions</h2>
+          <button class="text-btn" data-go="history">View all →</button>
+        </div>
+        <div id="recentTransactions"></div>
+      </div>
+    </div>
+
+    <!-- TRANSFER -->
+    <div class="content-page" id="transfer">
+      <div class="panel form-panel">
+        <h2>Transfer money</h2>
+        <div class="notice">Demo transfer: funds are moved only within this simulated application.</div>
+        <form id="transferForm">
+          <div class="field">
+            <label>Recipient account number</label>
+            <input id="recipient" placeholder="Enter 10-digit demo account number" maxlength="10" required>
+          </div>
+          <div class="field">
+            <label>Recipient name</label>
+            <input id="recipientName" placeholder="Enter recipient name" required>
+          </div>
+          <div class="field">
+            <label>Amount (₦)</label>
+            <input id="transferAmount" type="number" min="1" step="0.01" placeholder="0.00" required>
+          </div>
+          <div class="field">
+            <label>Narration</label>
+            <input id="narration" placeholder="What's this transfer for?">
+          </div>
+          <button class="primary-btn" type="submit">Confirm demo transfer</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- DEPOSIT -->
+    <div class="content-page" id="deposit">
+      <div class="panel form-panel">
+        <h2>Make a deposit</h2>
+        <div class="notice">This feature adds simulated funds to your demo account. No real payment is processed.</div>
+        <form id="depositForm">
+          <div class="field">
+            <label>Deposit amount (₦)</label>
+            <input id="depositAmount" type="number" min="1" step="0.01" placeholder="Enter amount" required>
+          </div>
+          <div class="field">
+            <label>Deposit description</label>
+            <input id="depositDescription" placeholder="e.g. Demo funding">
+          </div>
+          <button class="primary-btn" type="submit">Add demo funds</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- WITHDRAW -->
+    <div class="content-page" id="withdraw">
+      <div class="panel form-panel">
+        <h2>Withdraw money</h2>
+        <div class="notice">Withdrawals are simulated and deducted from your demo balance only.</div>
+        <form id="withdrawForm">
+          <div class="field">
+            <label>Withdrawal amount (₦)</label>
+            <input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="Enter amount" required>
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <input id="withdrawDescription" placeholder="e.g. Cash withdrawal">
+          </div>
+          <button class="primary-btn" type="submit">Confirm demo withdrawal</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="content-page" id="history">
+      <div class="panel">
+        <div class="section-heading">
+          <h2>Transaction history</h2>
+          <span class="account-info">DEMO ACCOUNT</span>
+        </div>
+        <div id="allTransactions" class="history-list"></div>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="content-page" id="profile">
+      <div class="panel form-panel">
+        <h2>My account</h2>
+        <div class="field">
+          <label>Account holder</label>
+          <input value="Demo User" readonly>
+        </div>
+        <div class="field">
+          <label>Account number</label>
+          <input value="0123456789" readonly>
+        </div>
+        <div class="field">
+          <label>Account type</label>
+          <input value="Savings Account" readonly>
+        </div>
+        <div class="field">
+          <label>Bank name</label>
+          <input value="ZIC Bank (Demo)" readonly>
+        </div>
+        <div class="notice">This profile is fictional and exists only for testing the ZIC demo application.</div>
+      </div>
+    </div>
+  </main>
+
+  <nav class="mobile-menu">
+    <button class="active" data-page="home"><span>▦</span>Home</button>
+    <button data-page="transfer"><span>↗</span>Transfer</button>
+    <button data-page="deposit"><span>＋</span>Deposit</button>
+    <button data-page="history"><span>◷</span>History</button>
+    <button id="mobileLogout"><span>↪</span>Exit</button>
+  </nav>
+</section>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+<script>
+  const money = amount => "₦" + Number(amount).toLocaleString("en-NG", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+
+  let balance = 250000;
+  let totalDeposits = 250000;
+  let totalWithdrawals = 0;
+  let hideBalance = false;
+
+  let transactions = [
+    {
+      name: "Opening demo balance",
+      date: new Date().toLocaleString(),
+      amount: 250000,
+      type: "credit"
+    }
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  function notify(message) {
+    const toast = $("toast");
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+    clearTimeout(window.toastTimer);
+    window.toastTimer = setTimeout(() => toast.classList.add("hidden"), 3000);
+  }
+
+  function render() {
+    $("balance").textContent = hideBalance ? "₦••••••••" : money(balance);
+    $("totalDeposits").textContent = money(totalDeposits);
+    $("totalWithdrawals").textContent = money(totalWithdrawals);
+    $("totalTransactions").textContent = transactions.length;
+    $("toggleBalance").textContent = hideBalance ? "Show" : "Hide";
+
+    const recent = transactions.slice(0, 4);
+    $("recentTransactions").innerHTML = recent.length
+      ? recent.map(transactionHTML).join("")
+      : "<p>No transactions yet.</p>";
+
+    $("allTransactions").innerHTML = transactions.length
+      ? transactions.map(transactionHTML).join("")
+      : "<p>No transactions yet.</p>";
+  }
+
+  function transactionHTML(tx) {
+    const credit = tx.type === "credit";
+    return `
+      <div class="transaction">
+        <div class="transaction-left">
+          <div class="tx-icon">${credit ? "↓" : "↑"}</div>
+          <div>
+            <div class="tx-name">${escapeHTML(tx.name)}</div>
+            <div class="tx-date">${escapeHTML(tx.date)}</div>
+          </div>
+        </div>
+        <div class="tx-amount ${credit ? "credit" : "debit"}">
+          ${credit ? "+" : "-"}${money(tx.amount)}
+        </div>
+      </div>
+    `;
+  }
+
+  function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+      '"': "&quot;", "'": "&#039;"
+    })[char]);
+  }
+
+  function record(name, amount, type) {
+    transactions.unshift({
+      name,
+      amount,
+      type,
+      date: new Date().toLocaleString()
+    });
+    render();
+  }
+
+  function showPage(page) {
+    document.querySelectorAll(".content-page").forEach(el => {
+      el.classList.toggle("active", el.id === page);
+    });
+
+    document.querySelectorAll("[data-page]").forEach(el => {
+      el.classList.toggle("active", el.dataset.page === page);
+    });
+
+    const titles = {
+      home: "Dashboard",
+      transfer: "Transfer money",
+      deposit: "Make a deposit",
+      withdraw: "Withdraw money",
+      history: "Transaction history",
+      profile: "My profile"
+    };
+
+    $("pageTitle").textContent = titles[page] || "Dashboard";
+    window.scrollTo(0, 0);
+  }
+
+  $("loginForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const username = $("username").value.trim();
+    const password = $("password").value;
+
+    if (username === "demo" && password === "zic123") {
+      $("loginPage").classList.add("hidden");
+      $("dashboard").classList.remove("hidden");
+      render();
+      notify("Welcome to ZIC Demo Banking!");
+    } else {
+      notify("Incorrect demo login. Try demo / zic123.");
+    }
+  });
+
+  function logout() {
+    $("dashboard").classList.add("hidden");
+    $("loginPage").classList.remove("hidden");
+    $("password").value = "";
+    $("username").value = "";
+    notify("You have signed out.");
+  }
+
+  $("logoutBtn").addEventListener("click", logout);
+  $("mobileLogout").addEventListener("click", logout);
+
+  document.querySelectorAll("[data-page]").forEach(button => {
+    button.addEventListener("click", () => showPage(button.dataset.page));
+  });
+
+  document.querySelectorAll("[data-go]").forEach(button => {
+    button.addEventListener("click", () => showPage(button.dataset.go));
+  });
+
+  $("toggleBalance").addEventListener("click", () => {
+    hideBalance = !hideBalance;
+    render();
+  });
+
+  $("transferForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const account = $("recipient").value.trim();
+    const name = $("recipientName").value.trim();
+    const amount = Number($("transferAmount").value);
+    const narration = $("narration").value.trim();
+
+    if (!/^\d{10}$/.test(account)) {
+      notify("Enter a valid 10-digit demo account number.");
+      return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      notify("Enter a valid transfer amount.");
+      return;
+    }
+
+    if (amount > balance) {
+      notify("Insufficient demo balance.");
+      return;
+    }
+
+    balance -= amount;
+    totalWithdrawals += amount;
+    record("Transfer to " + name + (narration ? " - " + narration : ""), amount, "debit");
+
+    $("transferForm").reset();
+    notify("Demo transfer completed successfully.");
+    showPage("home");
+  });
+
+  $("depositForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const amount = Number($("depositAmount").value);
+    const description = $("depositDescription").value.trim();
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      notify("Enter a valid deposit amount.");
+      return;
+    }
+
+    balance += amount;
+    totalDeposits += amount;
+    record(description || "Demo deposit", amount, "credit");
+
+    $("depositForm").reset();
+    notify("Demo funds added successfully.");
+    showPage("home");
+  });
+
+  $("withdrawForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const amount = Number($("withdrawAmount").value);
+    const description = $("withdrawDescription").value.trim();
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      notify("Enter a valid withdrawal amount.");
+      return;
+    }
+
+    if (amount > balance) {
+      notify("Insufficient demo balance.");
+      return;
+    }
+
+    balance -= amount;
+    totalWithdrawals += amount;
+    record(description || "Demo cash withdrawal", amount, "debit");
+
+    $("withdrawForm").reset();
+    notify("Demo withdrawal completed.");
+    showPage("home");
+  });
+
+  render();
+</script>
+</body>
+</html>
